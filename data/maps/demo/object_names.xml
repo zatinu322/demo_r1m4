@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="windows-1251" standalone="yes" ?>
+<ObjectNames>
+	<Object
+		Name="TheOlme"
+		FullName="Ольм" />
+
+	<Object
+		Name="Olme_Bar"
+		FullName="Бар ''На окраине''" />
+
+	<Object
+		Name="Olme_Shop"
+		FullName="Магазин" />
+
+	<Object
+		Name="Olme_Workshop"
+		FullName="Мастерская" />
+
+	<Object
+		Name="Olme_Bar_Barman"
+		FullName="Бармен" />
+
+	<Object
+		Name="FVOnOcean"
+		FullName="Салиниом" />
+
+	<Object
+		Name="FVOnOcean_Bar"
+		FullName="Бар ''У моря''" />
+
+	<Object
+		Name="FVOnOcean_Shop"
+		FullName="Магазин" />
+
+	<Object
+		Name="FVOnOcean_Workshop"
+		FullName="Мастерская" />
+
+	<Object
+		Name="FVOnOcean_Bar_Barman"
+		FullName="Бармен" />
+
+	<Object
+		Name="Ieri"
+		FullName="Старик" />
+
+	<Object
+		Name="OtherMan"
+		FullName="Рыбак Бак" />
+
+	<Object
+		Name="FVNearOlme"
+		FullName="Лаука" />
+	
+	<Object
+		Name="FVNearOlme_enter"
+		FullName="Лаука" />
+
+	<Object
+		Name="FVNearOlme_Bar"
+		FullName="Бар ''Селинд''" />
+
+	<Object
+		Name="FVNearOlme_Shop"
+		FullName="Магазин" />
+
+	<Object
+		Name="FVNearOlme_Workshop"
+		FullName="Мастерская" />
+
+	<Object
+		Name="FVNearOlme_Bar_Barman"
+		FullName="Бармен" />
+
+	<Object
+		Name="FVCalis"
+		FullName="Калис" />
+	
+	<Object
+		Name="FVCalis_enter"
+		FullName="Калис" />
+
+	<Object
+		Name="FVCalis_Bar"
+		FullName="Бар ''Гладиатор''" />
+
+	<Object
+		Name="FVCalis_Shop"
+		FullName="Магазин" />
+
+	<Object
+		Name="FVCalis_Workshop"
+		FullName="Мастерская" />
+
+	<Object
+		Name="FVCalis_Bar_Barman"
+		FullName="Бармен" />
+
+	<Object
+		Name="TankGirl"
+		FullName="Танкистка" />
+
+	<Object
+		Name="FVCordan"
+		FullName="Кордан" />
+	
+	<Object
+		Name="FVCordan_enter"
+		FullName="Кордан" />
+
+	<Object
+		Name="FVCordan_Bar"
+		FullName="Бар ''Пасть акулы''" />
+
+	<Object
+		Name="FVCordan_Shop"
+		FullName="Магазин" />
+
+	<Object
+		Name="FVCordan_Workshop"
+		FullName="Мастерская" />
+
+	<Object
+		Name="FVCordan_Bar_Barman"
+		FullName="Бармен" />
+
+	<Object
+		Name="Knowman"
+		FullName="Фрай" />
+
+	<Object
+		Name="FVPerch"
+		FullName="Перчь" />
+
+	<Object
+		Name="FVPerch_Bar"
+		FullName="Бар ''Золотая жила''" />
+
+	<Object
+		Name="FVPerch_Shop"
+		FullName="Магазин" />
+
+	<Object
+		Name="FVPerch_Workshop"
+		FullName="Мастерская" />
+
+	<Object
+		Name="FVPerch_Bar_Barman"
+		FullName="Бармен" />
+
+	<Object
+		Name="FVBerko"
+		FullName="Берко" />
+	
+	<Object
+		Name="FVBerko_enter"
+		FullName="Берко" />
+
+	<Object
+		Name="FVBerko_Bar"
+		FullName="Бар ''Закоулок''" />
+
+	<Object
+		Name="FVBerko_Shop"
+		FullName="Магазин" />
+
+	<Object
+		Name="FVBerko_Workshop"
+		FullName="Мастерская" />
+
+	<Object
+		Name="FVBerko_Bar_Barman"
+		FullName="Бармен" />
+
+	<Object
+		Name="Sinks"
+		FullName="Синкс" />
+
+	<Object
+		Name="RealIeri"
+		FullName="Иери" />
+
+	<Object
+		Name="StorageVil_enter"
+		FullName="Склад" />
+
+	<Object
+		Name="TheOlme_enter"
+		FullName="Ольм" />
+
+	<Object
+		Name="FVPerch_enter"
+		FullName="Перчь" />
+</ObjectNames>

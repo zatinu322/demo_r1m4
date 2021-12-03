@@ -1,0 +1,571 @@
+<?xml version="1.0" encoding="windows-1251" standalone="yes" ?>
+<triggers><!-- **************** старт карты, проверка условий квестов-->
+	<trigger	Name="trAutoSave"	active="0">
+		<event eventid="GE_GAME_START" ObjName="Player1" />
+		<script>
+		</script>
+	</trigger>
+
+	<trigger Name="trBelongChange" active="1">
+		<event	timeout="5"		eventid="GE_TIME_PERIOD" />
+		<script>
+			local vehP = GetPlayerVehicle()
+			if vehP then
+				local bel = vehP:GetBelong()
+				if bel == 1100 then
+					GetPlayerVehicle():SetBelong(1101)
+--					LOG("CHANGED")
+				end
+			end
+			
+--			trigger:Deactivate()
+		</script>
+	</trigger>
+
+	<trigger Name="StartGame" active="1">
+		<event 	timeout="0" eventid="GE_TIME_PERIOD" />
+		<script>
+			SetRadarUpgrade(1)
+
+			g_ObjCont:SetGameTime( 11, 0 , 15,  1,  2205 )
+
+			AddPlayerVehicle("r2m1_Ural01")
+			GetPlayerVehicle():SetSkin(1)
+			GetPlayerVehicle():SetBelong(1101)
+
+			SetWeather( 0 )
+
+			AddQuestItem("quest_demo_photo")
+
+			RuleConsole("cinematic_spring_coeff 5.7")
+
+			CinemaFiltersUse()
+			ReadyCinematic()
+
+			local idn01 = GetPlayerVehicleId()
+
+			Fly("Start_cam01", CINEMATIC_NO_AIM, 0, 4, 1, 0 )
+			FlyLinked( "Start_cam02", idn01, 4, 0, 0 )
+			Fly("Start_cam03", CINEMATIC_NO_AIM, 0, 11, 0, 0 )
+			Fly("Start_cam04", CINEMATIC_NO_AIM, 0, 11, 0, 1 )
+			StartCinematic()
+			UpdateCinematic( 1 )
+
+			TActivate( "trStart_cam03" )
+			TActivate( "trStart_cam04" )
+			TActivate( "RolikEnd_Start" )
+			TActivate( "StartGameMusic" )
+
+			local vehPlayer = GetPlayerVehicle()
+			if vehPlayer then
+				vehPlayer:SetGamePositionOnGround( CVector(2761.702, 228.465, 407.911))
+				vehPlayer:SetRotation(Quaternion(0.002, -0.113, -0.007, 0.994))
+				vehPlayer:SetCustomControlEnabled( true )       
+				vehPlayer:SetExternalPathByName("player_path01")
+				vehPlayer:SetCustomControlEnabled( false )      
+				vehPlayer:SetThrottle( 0 )                      
+				vehPlayer:SetCustomLinearVelocity( 0 )         
+			end
+
+			trigger:Deactivate()    
+		</script>
+	</trigger>
+
+	<trigger Name="StartGameMusic" active="0">
+		<event	timeout="2"		eventid="GE_TIME_PERIOD" />
+		<script>
+			PlayCustomMusic("start")
+			SaveAllToleranceStatus(RS_NEUTRAL)
+			trigger:Deactivate()
+		</script>
+	</trigger>
+
+<!-- Выезд с карты -->
+	<trigger Name="ExitMap" active="0">
+		<event	eventid="GE_OBJECT_ENTERS_LOCATION"	ObjName="ExitFromMap" />
+		<script>
+			TActivate( "RolikBegin_Board" )
+
+			trigger:Deactivate()
+ 		</script>
+	</trigger>
+
+
+
+<!-- Город Призрак -->
+	<trigger Name="Trigger_GhostTown" active="1">
+		<event eventid="GE_OBJECT_ENTERS_LOCATION" ObjName="GostSite01_loc" />
+		<script>
+			TActivate ("RolikBegin_GostSite1")
+
+			trigger:Deactivate() 
+		</script>
+	</trigger>
+
+
+<!-- Сменил машину -->
+	<trigger Name="Trigger_FindUpgrade" active="0">
+		<event eventid="GE_TUTORIAL_WORKSHOP" ObjName="Olme_Workshop" />
+		<script>
+			CompleteQuest( "demo_FindWorkshop_Quest" )
+
+			TActivate ("Trigger_NewCar")
+
+			trigger:Deactivate() 
+		</script>
+	</trigger>
+
+	<trigger Name="Trigger_NewCar" active="0">
+		<event 	timeout="1" eventid="GE_TIME_PERIOD" />
+		<script>
+			local PlfPS = GetPlayerVehicle():GetProperty("Prototype").AsString
+			if PlfPS == "MolokovozForSale" then
+				CompleteQuest( "demo_GetMoney_Quest" )
+
+				TActivate ("TriggerSkladSinks")
+				TActivate ("TriggerMyFriends")
+
+ 				ShowCircleOnMinimap( "demo", CVector(916, 306, 2509), 100 )
+
+				trigger:Deactivate() 
+			end
+		</script>
+	</trigger>
+
+
+
+<!-- Встреча с дружками -->
+	<trigger Name="TriggerMyFriends" active="0">
+		<event eventid="GE_OBJECT_ENTERS_LOCATION" ObjName="bandit01_loc" />
+		<script>
+			TActivate ("RolikBegin_Situation1")
+
+			trigger:Deactivate() 
+		</script>
+	</trigger>
+
+
+
+<!-- Синкс на складе -->
+	<trigger Name="TriggerSkladSinks" active="0">
+		<event eventid="GE_OBJECT_ENTERS_LOCATION" ObjName="StorageVil_enter" />
+		<script>
+			TActivate ("RolikBegin_Sklad01")
+
+			trigger:Deactivate() 
+		</script>
+	</trigger>
+
+	<trigger Name="TriggerSkladSinksDie" active="0">
+		<event eventid="GE_VEHICLE_WITHOUT_HEALTH" ObjName="SinksRuner_vehicle_0" />
+		<script>
+			StartConversation( "Sinks" )
+
+			trigger:Deactivate() 
+		</script>
+	</trigger>
+
+	<trigger Name="TriggerSkladGun" active="0">
+		<event eventid="GE_OBJECT_ENTERS_LOCATION"	ObjName="StorageVil_enter" />
+		<event eventid="GE_OBJECT_IN_LOCATION"		ObjName="StorageVil_enter" />
+		<script>
+			TActivate ("RolikBegin_Sklad02")
+
+			ShowCircleOnMinimap( "demo", CVector(2801.324, 216.000, 3640.781), 100 )
+
+			trigger:Deactivate() 
+		</script>
+	</trigger>
+
+
+
+<!-- Старик не так прост -->
+	<trigger Name="TriggerUnrealOldMan" active="0">
+		<event eventid="GE_OBJECT_ENTERS_LOCATION" ObjName="Situation2_Loc" />
+		<script>
+			TActivate ("RolikBegin_Situation2")
+
+			trigger:Deactivate() 
+		</script>
+	</trigger>
+
+
+
+<!-- Вернулся к старику -->
+	<trigger Name="TriggerReturnToOldMan" active="0">
+		<event eventid="GE_OBJECT_ENTERS_LOCATION" ObjName="FVOnOcean_defend" />
+		<script>
+			TActivate ("RolikBegin_HomeIeri")
+
+			ShowCircleOnMinimap( "demo", CVector(2021, 209, 821), 100 )
+
+			AddQuestItem("quest_demo_letter")
+
+			trigger:Deactivate() 
+		</script>
+	</trigger>
+
+
+
+<!-- Проезд через болото -->
+	<trigger Name="TriggerMorrasTrue" active="0">
+		<event eventid="GE_OBJECT_ENTERS_LOCATION" ObjName="Swamp01_loc" />
+		<script>
+			TDeactivate ("TriggerMorrasHeroDie")
+
+			TActivate ("RolikBegin_Swamp02")
+
+			trigger:Deactivate() 
+		</script>
+	</trigger>
+
+	<trigger Name="TriggerMorrasFalse" active="1">
+		<event eventid="GE_OBJECT_ENTERS_LOCATION" ObjName="Swamp01_loc" />
+		<script>
+			TDeactivate ("TriggerMorrasHeroDie")
+
+			TActivate ("RolikBegin_Swamp01")
+
+			trigger:Deactivate() 
+		</script>
+	</trigger>
+
+
+
+<!-- Игрок заехал в болото -->
+	<trigger Name="TriggerMorrasHeroDie" active="1">
+		<event eventid="GE_OBJECT_IN_LOCATION" ObjName="SwampDead1" />
+		<event eventid="GE_OBJECT_IN_LOCATION" ObjName="SwampDead2" />
+		<event eventid="GE_OBJECT_IN_LOCATION" ObjName="SwampDead3" />
+		<event eventid="GE_OBJECT_IN_LOCATION" ObjName="SwampDead4" />
+		<event eventid="GE_OBJECT_IN_LOCATION" ObjName="SwampDead5" />
+		<event eventid="GE_OBJECT_IN_LOCATION" ObjName="SwampDead6" />
+		<event eventid="GE_OBJECT_ENTERS_LOCATION" ObjName="SwampDead1" />
+		<event eventid="GE_OBJECT_ENTERS_LOCATION" ObjName="SwampDead2" />
+		<event eventid="GE_OBJECT_ENTERS_LOCATION" ObjName="SwampDead3" />
+		<event eventid="GE_OBJECT_ENTERS_LOCATION" ObjName="SwampDead4" />
+		<event eventid="GE_OBJECT_ENTERS_LOCATION" ObjName="SwampDead5" />
+		<event eventid="GE_OBJECT_ENTERS_LOCATION" ObjName="SwampDead6" />
+		<script>
+			GetPlayerVehicle():AddModifier("hp","= -100000")
+
+			trigger:Deactivate() 
+		</script>
+	</trigger>
+
+
+
+
+
+<!-- Иери на болоте -->
+	<trigger Name="TriggerIeriMorras" active="0">
+		<event eventid="GE_OBJECT_ENTERS_LOCATION" ObjName="RolikIeri_loc01" />
+		<script>
+			TActivate ("RolikBegin_IeriDialog")
+
+			trigger:Deactivate() 
+		</script>
+	</trigger>
+
+
+
+<!-- Защитить Иери-->
+	<trigger Name="TriggerDefendIeri" active="0">
+		<event 	timeout="0" eventid="GE_TIME_PERIOD" />
+		<script>
+			TActivate ("RolikBegin_Bandits02")
+
+			trigger:Deactivate() 
+		</script>
+	</trigger>
+
+	<trigger Name="TriggerDefendIeriDie" active="0">
+		<event eventid="GE_OBJECT_DIE" ObjName="Bratva" />
+		<script>
+
+			TActivate ("RolikBegin_Bantits03")
+			
+			TDeactivate("trBelongChange")
+
+			PlayCustomMusic("r3_1_alarm")
+
+-- Иери заезжает в лодку
+			local name = GetPlayerVehicle():GetName()
+			local PC = GetPlayerVehicle():GetPosition()
+			local PQ = GetPlayerVehicle():GetRotation()
+			SetVar("PlCarName",name)
+			CapturePlayerVehicle(0, "MemPlayer")
+
+			g_Player:AddChild(GetEntityByName("vehIeri"))
+
+			local PlNew=GetPlayerVehicle()
+			if PlNew then
+				PlNew:SetRotation(Quaternion(0.008, 0.697, 0.007, -0.717))
+				PlNew:SetGamePositionOnGround( CVector(818.260, 215.904, 756.671))
+				PlNew:setGodMode(1)
+				PlNew:SetBelong(1100)
+			end
+
+			local PlOld = getObj(name)
+			if PlOld then
+				PlOld:SetRotation(PQ)
+				PlOld:SetGamePositionOnGround(PC)
+				PlOld:setGodMode(1)
+			end
+
+-- подплывает лодка
+			getObj("SubmarinaR1M4"):StartMotionToPort()
+
+			trigger:Deactivate() 
+		</script>
+	</trigger>
+
+
+
+<!-- Убить Иери-->
+	<trigger Name="TriggerKillIeri" active="0">
+		<event 	timeout="0" eventid="GE_TIME_PERIOD" />
+		<script>
+			TeamCreate("IeriBand",1005,CVector(2015,223,728),{"PublicDemoIeriBand1","PublicDemoIeriBand2","PublicDemoIeriCar"},CVector(1938,222,806))
+
+			TActivate ("TriggerKillIeriDie")
+
+			trigger:Deactivate() 
+		</script>
+	</trigger>
+
+	<trigger Name="TriggerKillIeriDie" active="0">
+		<event eventid="GE_OBJECT_DIE" ObjName="IeriBand" />
+		<script>
+			TActivate ("RolikBegin_Bandits01")
+
+			trigger:Deactivate() 
+		</script>
+	</trigger>
+
+
+<!-- Туториал -->
+	<trigger Name="tr_Tutotial_Start" active="0">
+		<event 	timeout="2" eventid="GE_TIME_PERIOD" />
+		<script>
+			trigger:Deactivate() 
+
+			EnableAutoHelp( false )
+
+			local b = SpawnMessageBox( "90000" )
+			if b == 1 then
+				EnableAutoHelp( true )
+				ShowHelp( "HELP_ID_MAIN_GAME_INTERFACE" )
+			end
+ 		</script>
+	</trigger>
+
+	<trigger Name="tr_Tutotial_WASD" active="0">
+		<event timeout="2" eventid="GE_TIME_PERIOD" />
+		<script>
+			trigger:Deactivate() 
+
+			SpawnMessageBox( "90001" )
+			SpawnMessageBox( "90002" )
+
+			TActivate ("tr_Tutotial_MainGame")
+ 		</script>
+	</trigger>
+
+	<trigger Name="tr_Tutotial_MainGame" active="0">
+		<event timeout="5" eventid="GE_TIME_PERIOD" />
+		<script>
+			trigger:Deactivate() 
+
+			SpawnMessageBox( "90003" )
+			SpawnMessageBox( "90004" )
+			SpawnMessageBox( "90005" )
+			SpawnMessageBox( "90006" )
+			SpawnMessageBox( "90007" )
+
+			TActivate ("tr_Tutotial_Vehicle")
+ 		</script>
+	</trigger>
+
+	<trigger Name="tr_Tutotial_Vehicle" active="0">
+		<event timeout="5" eventid="GE_TIME_PERIOD" />
+		<script>
+			trigger:Deactivate() 
+
+			SpawnMessageBox( "90008" )
+
+			TActivate ("tr_Tutotial_VehicleOpen")
+		</script>
+	</trigger>
+	<trigger Name="tr_Tutotial_VehicleOpen" active="0">
+		<event eventid="GE_TUTORIAL_VEHICLE" ObjName="Player1" />
+		<script>
+			trigger:Deactivate() 
+
+			SpawnMessageBox( "90009" )
+			SpawnMessageBox( "90010" )
+
+			TActivate ("tr_Tutotial_Inventory")
+		</script>
+	</trigger>
+
+	<trigger Name="tr_Tutotial_Inventory" active="0">
+		<event timeout="5" eventid="GE_TIME_PERIOD" />
+		<script>
+			trigger:Deactivate() 
+
+			SpawnMessageBox( "90011" )
+
+			TActivate ("tr_Tutotial_InventoryOpen")
+		</script>
+	</trigger>
+	<trigger Name="tr_Tutotial_InventoryOpen" active="0">
+		<event eventid="GE_TUTORIAL_INVENTORY" ObjName="Player1" />
+		<script>
+			trigger:Deactivate() 
+
+			SpawnMessageBox( "90012" )
+			SpawnMessageBox( "90013" )
+
+			TActivate ("tr_Tutotial_Quests")
+		</script>
+	</trigger>
+
+	<trigger Name="tr_Tutotial_Quests" active="0">
+		<event timeout="5" eventid="GE_TIME_PERIOD" />
+		<script>
+			trigger:Deactivate() 
+
+			SpawnMessageBox( "90014" )
+
+			TActivate ("tr_Tutotial_QuestsOpen")
+		</script>
+	</trigger>
+	<trigger Name="tr_Tutotial_QuestsOpen" active="0">
+		<event eventid="GE_TUTORIAL_QUESTLOG" ObjName="Player1" />
+		<script>
+			trigger:Deactivate() 
+
+			SpawnMessageBox( "90015" )
+
+			TActivate ("tr_Tutotial_Map")
+		</script>
+	</trigger>
+
+	<trigger Name="tr_Tutotial_Map" active="0">
+		<event timeout="5" eventid="GE_TIME_PERIOD" />
+		<script>
+			trigger:Deactivate() 
+
+			SpawnMessageBox( "90016" )
+
+			TActivate ("tr_Tutotial_MapOpen")
+		</script>
+	</trigger>
+	<trigger Name="tr_Tutotial_MapOpen" active="0">
+		<event eventid="GE_TUTORIAL_MAP" ObjName="Player1" />
+		<script>
+			trigger:Deactivate() 
+
+			SpawnMessageBox( "90017" )
+
+			TActivate ("tr_Tutotial_Journal")
+		</script>
+	</trigger>
+
+	<trigger Name="tr_Tutotial_Journal" active="0">
+		<event timeout="5" eventid="GE_TIME_PERIOD" />
+		<script>
+			trigger:Deactivate() 
+
+			SpawnMessageBox( "90018" )
+
+			TActivate ("tr_Tutotial_JournalOpen")
+		</script>
+	</trigger>
+	<trigger Name="tr_Tutotial_JournalOpen" active="0">
+		<event eventid="GE_TUTORIAL_JOURNAL" ObjName="Player1" />
+		<script>
+			trigger:Deactivate() 
+
+			SpawnMessageBox( "90019" )
+
+			TActivate ("tr_Tutotial_Town")
+		</script>
+	</trigger>
+
+<!-- Туториал в городе -->
+	<trigger Name="tr_Tutotial_Town" active="0">
+		<event eventid="GE_OBJECT_ENTERS_LOCATION" ObjName="TheOlme_enter_player" />
+		<event eventid="GE_OBJECT_ENTERS_LOCATION" ObjName="FVOnOcean_enter_player" />
+		<event eventid="GE_OBJECT_ENTERS_LOCATION" ObjName="FVNearOlme_enter_player" />
+		<event eventid="GE_OBJECT_ENTERS_LOCATION" ObjName="FVCalis_enter_player" />
+		<event eventid="GE_OBJECT_ENTERS_LOCATION" ObjName="FVCordan_enter_player" />
+		<event eventid="GE_OBJECT_ENTERS_LOCATION" ObjName="FVPerch_enter_player" />
+		<event eventid="GE_OBJECT_ENTERS_LOCATION" ObjName="FVBerko_enter_player" />
+		<script>
+			trigger:Deactivate() 
+
+			SpawnMessageBox( "90020" )
+
+			TActivate ("tr_Tutotial_EnterTown")
+		</script>
+	</trigger>
+
+	<trigger Name="tr_Tutotial_EnterTown" active="0">
+		<event eventid="GE_TUTORIAL_TOWN" ObjName="Player1" />
+		<script>
+			trigger:Deactivate() 
+
+			SpawnMessageBox( "90021" )
+
+			TActivate ("tr_Tutotial_TownBar")
+			TActivate ("tr_Tutotial_TownShop")
+			TActivate ("tr_Tutotial_TownWorkshop")
+		</script>
+	</trigger>
+
+	<trigger Name="tr_Tutotial_TownBar" active="0">
+		<event eventid="GE_TUTORIAL_BAR" ObjName="Player1" />
+		<script>
+			trigger:Deactivate() 
+
+			SpawnMessageBox( "90022" )
+		</script>
+	</trigger>
+
+	<trigger Name="tr_Tutotial_TownShop" active="0">
+		<event eventid="GE_TUTORIAL_SHOP" ObjName="Player1" />
+		<script>
+			trigger:Deactivate() 
+
+			SpawnMessageBox( "90023" )
+		</script>
+	</trigger>
+
+	<trigger Name="tr_Tutotial_TownWorkshop" active="0">
+		<event eventid="GE_TUTORIAL_WORKSHOP" ObjName="Player1" />
+		<script>
+			trigger:Deactivate() 
+
+			SpawnMessageBox( "90024" )
+		</script>
+	</trigger>
+
+	<trigger	Name="trPlaceSecret"	active="1">
+		<event	timeout="0.1"			eventid="GE_TIME_PERIOD" />
+		<script>
+			local i=1
+			local gunlist = {"hornet01","specter01","pkt01","kord01","storm01","vector01","vulcan01","kpvt01","rapier01","flag01","rainmetal01","omega01","bumblebee01"}
+			local len = getn(gunlist)
+
+			while getObj("SecretPlace"..i.."_loc")~=nil do
+--				println(i)
+				CreateBoxWithAffixGun(CVector(getPos("SecretPlace"..i.."_loc")), gunlist[exrandom(len)], random(3))
+				i = i + 1
+			end
+
+			trigger:Deactivate()
+		</script>
+	</trigger>
+</triggers>
